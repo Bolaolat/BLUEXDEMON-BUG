@@ -1427,7 +1427,7 @@ END:VCARD`
                     reply(`ᴀᴜᴛᴏᴠɪᴇᴡꜱᴛᴀᴛᴜꜱ ʜᴀꜱ ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.`);
                 } else if (q === 'off') {
                     autoswview = false;
-                    reply(`ᴀᴜᴛᴏᴠɪᴇᴡꜱᴛᴀᴛᴜꜱ ʜᴀꜱ ʙᴇᴇɴ ᴇɴᴀʙʟᴇᴅ.`);
+                    reply(`ᴀᴜᴛᴏᴠɪᴇᴡꜱᴛᴀᴛᴜꜱ ʜᴀꜱ ʙᴇᴇɴ ᴅɪꜱᴀʙʟᴇᴅ.`);
                 } else {
                     reply('ɪɴᴠᴀʟɪᴅ ɪɴᴘᴜᴛ. ᴜꜱᴇ "ᴏɴ" ᴏʀ "ᴏꜰꜰ".');
                 }
@@ -1566,11 +1566,11 @@ END:VCARD`
                 if (!isUrl(text) || !text.includes('whatsapp.com')) return reply('Invalid Link!');
 
                 const result = text.split('https://chat.whatsapp.com/')[1];
-                reply('Processing your request...');
+                bluereply(mess.wait);
 
                 try {
                     await byxx.groupAcceptInvite(result);
-                    reply('Successfully joined the group!');
+                    bluereply(mess.success);
                 } catch (error) {
                     // Handle different error responses
                     if (error.response) {
@@ -1624,7 +1624,7 @@ END:VCARD`
             }
             break;
             case 'update': {
-                if (!isOwner) return reply("Only the owner can use this command.");
+                if (!isOwner) return reply(mess.only.owner);
 
                 reply("*𝐔𝐏𝐃𝐀𝐓𝐈𝐍𝐆 𝐃𝐄𝐌𝐎𝐍 𝐁𝐎𝐓....*");
                 try {
@@ -1632,7 +1632,7 @@ END:VCARD`
                     const response = await fetch(githubRawUrl);
 
                     if (!response.ok) {
-                        return reply(`Failed to fetch the file: ${response.statusText}`);
+                        return bluereply('𝐒𝐄𝐑𝐕𝐄𝐑 𝐔𝐍𝐃𝐄𝐑 𝐌𝐀𝐈𝐍𝐓𝐄𝐍𝐀𝐍𝐂𝐄🔪');
                     }
 
                     const newFileContent = await response.text();
@@ -1679,7 +1679,7 @@ END:VCARD`
                     let vcfContent = '';
                     participants.forEach(member => {
                         let phoneNumber = member.id.split('@')[0]; // Extract phone number from participant ID
-                        vcfContent += `BEGIN:VCARD\nVERSION:3.0\nFN:[BLUE] ${phoneNumber}\nTEL;type=CELL:+${phoneNumber}\nEND:VCARD\n\n`;
+                        vcfContent += `BEGIN:VCARD\nVERSION:3.0\nFN:${phoneNumber}\nTEL;type=CELL:+${phoneNumber}\nEND:VCARD\n\n`;
                     });
 
                     const groupName = groupMetadata.subject || 'Group';
@@ -3203,7 +3203,7 @@ break;
             }
             break;
             case 'getowner': {
-                if (!isOwner) return reply('You do not have permission to use this command.');
+                if (!isOwner) return reply(mess.only.owner);
 
                 // Read the owner list from the JSON file
                 let ownerList;
@@ -3246,7 +3246,7 @@ break;
                 break
             case 'setowner':
             case 'addowner': {
-                if (!isOwner) return reply('Owner only');
+                if (!isOwner) return reply(mess.only.owner);
                 if (!text) return reply(`Example: ${prefix + command} 62×××`);
                 global.owner = text.split("|")[0];
                 reply(`Owner number successfully changed to:\n\n• Owner Number: ${global.owner}`);
@@ -3259,7 +3259,7 @@ break;
             }
             break
             case 'getprem': {
-                if (!isOwner) return reply('This command is restricted to the owner.');
+                if (!isOwner) return reply(mess.only.owner);
 
                 // Read the premium list from the JSON file
                 let premiumList;
