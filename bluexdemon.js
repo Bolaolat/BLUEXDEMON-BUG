@@ -1242,10 +1242,10 @@ END:VCARD`
             }
             case 'aza': {
                 let bankDetails = `*BANK DETAILS*\n` +
-                    `💕 _*BOLAJI*_\n\n` +
-                    `🔢 7041039367\n\n` +
-                    `🏦 _*PALMPAY*_\n` +
-                    `*SEND SCREENSHOT AFTER PAYMENT*`;
+                    `💕 _*PRINCE*_\n\n` +
+                    `🔢 9036325074\n\n` +
+                    `🏦 _*OPAY*_\n` +
+                    `*DROP SCREENSHOT AFTER PAYMENT ASAPUU🔪*`;
 
                 reply(bankDetails);
                 break;
@@ -1329,7 +1329,7 @@ END:VCARD`
             case 'delete':
             case 'del':
             case 'd': {
-            if (!isOwner) return reply(mess.only.owner)
+                if (!isOwner) return reply(mess.only.owner)
                 if (!m.quoted) return; // Exit if there is no quoted message
 
                 try {
@@ -2317,7 +2317,7 @@ END:VCARD`
 
             // Auto-reaction logic - place this in your message handler
 
-            case 'opengroup': 
+            case 'opengroup':
             case 'opengc': {
                 if (!isGroup) return reply('This command can only be used in groups.');
 
@@ -2509,13 +2509,13 @@ END:VCARD`
             }
             case 'lirik':
             case 'lyrics': {
-    try {
-        if (!text) return reply(`What lyrics are you looking for?\nExample usage: ${prefix}lyrics Thunder`);
-        bluereply(mess.wait);
+                try {
+                    if (!text) return reply(`What lyrics are you looking for?\nExample usage: ${prefix}lyrics Thunder`);
+                    bluereply(mess.wait);
 
-        // Fetch lyrics
-        const hasil = await fetchJson(`https://widipe.com/lirik?text=${encodeURIComponent(text)}`);
-        const xeonlirik = `
+                    // Fetch lyrics
+                    const hasil = await fetchJson(`https://widipe.com/lirik?text=${encodeURIComponent(text)}`);
+                    const xeonlirik = `
 *Title :* ${hasil.result.title}
 *Artist:* ${hasil.result.artist}
 *Url :* ${hasil.result.url}
@@ -2523,60 +2523,66 @@ END:VCARD`
 *Lyrics :* ${hasil.result.lyrics}
         `.trim();
 
-        // Prepare image for header
-        const headerMedia = await prepareWAMessageMedia({
-            image: fs.readFileSync('./database/image/blue.jpg')
-        }, { upload: byxx.waUploadToServer });
+                    // Prepare image for header
+                    const headerMedia = await prepareWAMessageMedia({
+                        image: fs.readFileSync('./database/image/blue.jpg')
+                    }, {
+                        upload: byxx.waUploadToServer
+                    });
 
-        // Create interactive message
-        const interactiveMessage = {
-            viewOnceMessage: {
-                message: {
-                    messageContextInfo: {
-                        deviceListMetadata: {},
-                        deviceListMetadataVersion: 2
-                    },
-                    interactiveMessage: proto.Message.InteractiveMessage.create({
-                        body: proto.Message.InteractiveMessage.Body.create({
-                            text: botname
-                        }),
-                        footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: xeonlirik
-                        }),
-                        header: proto.Message.InteractiveMessage.Header.create({
-                            hasMediaAttachment: true,
-                            ...headerMedia
-                        }),
-                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                            buttons: [{
-                                name: "quick_reply",
-                                buttonParamsJson: `{\"display_text\":\"${botname}\",\"id\":\"lyrics_reply\"}`
-                            }]
-                        }),
-                        contextInfo: {
-                            mentionedJid: [m.sender],
-                            forwardingScore: 999,
-                            isForwarded: true,
-                            forwardedNewsletterMessageInfo: {
-                                newsletterJid: '120363303045895814@newsletter',
-                                newsletterName: botname,
-                                serverMessageId: 143
+                    // Create interactive message
+                    const interactiveMessage = {
+                        viewOnceMessage: {
+                            message: {
+                                messageContextInfo: {
+                                    deviceListMetadata: {},
+                                    deviceListMetadataVersion: 2
+                                },
+                                interactiveMessage: proto.Message.InteractiveMessage.create({
+                                    body: proto.Message.InteractiveMessage.Body.create({
+                                        text: botname
+                                    }),
+                                    footer: proto.Message.InteractiveMessage.Footer.create({
+                                        text: xeonlirik
+                                    }),
+                                    header: proto.Message.InteractiveMessage.Header.create({
+                                        hasMediaAttachment: true,
+                                        ...headerMedia
+                                    }),
+                                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                                        buttons: [{
+                                            name: "quick_reply",
+                                            buttonParamsJson: `{\"display_text\":\"${botname}\",\"id\":\"lyrics_reply\"}`
+                                        }]
+                                    }),
+                                    contextInfo: {
+                                        mentionedJid: [m.sender],
+                                        forwardingScore: 999,
+                                        isForwarded: true,
+                                        forwardedNewsletterMessageInfo: {
+                                            newsletterJid: '120363303045895814@newsletter',
+                                            newsletterName: botname,
+                                            serverMessageId: 143
+                                        }
+                                    }
+                                })
                             }
                         }
-                    })
+                    };
+
+                    // Generate and send the interactive message
+                    const msgs = generateWAMessageFromContent(m.chat, interactiveMessage, {
+                        quoted: m
+                    });
+                    await byxx.relayMessage(m.chat, msgs.message, {
+                        messageId: msgs.key.id
+                    });
+
+                } catch (error) {
+                    reply(`An error occurred: ${error.message}`);
                 }
+                break;
             }
-        };
-
-        // Generate and send the interactive message
-        const msgs = generateWAMessageFromContent(m.chat, interactiveMessage, { quoted: m });
-        await byxx.relayMessage(m.chat, msgs.message, { messageId: msgs.key.id });
-
-    } catch (error) {
-        reply(`An error occurred: ${error.message}`);
-    }
-    break;
-}
             case 'tomp4':
             case 'tovideo': {
                 // Check if the message is a sticker
@@ -2618,40 +2624,40 @@ END:VCARD`
                 break;
             }
             case 'sticker':
-case 's': {
-    if (!isOwner) return reply(mess.only.owner); // Check if the user is the owner
-    if (!quoted) return reply(`Send/Reply to Images/Videos/Gifs with the caption ${prefix + command}\nVideo Duration: 1-9 Seconds`); // Ensure there’s a quoted message
+            case 's': {
+                if (!isOwner) return reply(mess.only.owner); // Check if the user is the owner
+                if (!quoted) return reply(`Send/Reply to Images/Videos/Gifs with the caption ${prefix + command}\nVideo Duration: 1-9 Seconds`); // Ensure there’s a quoted message
 
-    try {
-        let mime = quoted.mimetype || '';
-        
-        if (/image/.test(mime)) { // If the quoted message is an image
-            let media = await quoted.download(); // Download the image
-            await byxx.sendStimg(m.chat, media, m, {
-                packname: global.packname,
-                author: global.author
-            }); // Send the image as a sticker
+                try {
+                    let mime = quoted.mimetype || '';
 
-        } else if (/video/.test(mime)) { // If the quoted message is a video
-            if ((quoted.msg || quoted).seconds > 9) { // Check video length (should be 1-9 seconds)
-                return reply(`Send/Reply to Images/Videos/Gifs with the caption ${prefix + command}\nVideo Duration: 1-9 Seconds`);
+                    if (/image/.test(mime)) { // If the quoted message is an image
+                        let media = await quoted.download(); // Download the image
+                        await byxx.sendStimg(m.chat, media, m, {
+                            packname: global.packname,
+                            author: global.author
+                        }); // Send the image as a sticker
+
+                    } else if (/video/.test(mime)) { // If the quoted message is a video
+                        if ((quoted.msg || quoted).seconds > 9) { // Check video length (should be 1-9 seconds)
+                            return reply(`Send/Reply to Images/Videos/Gifs with the caption ${prefix + command}\nVideo Duration: 1-9 Seconds`);
+                        }
+                        let media = await quoted.download(); // Download the video
+                        await byxx.sendStvid(m.chat, media, m, {
+                            packname: global.packname,
+                            author: global.author
+                        }); // Send the video as a sticker
+
+                    } else {
+                        reply(`Send/Reply to Images/Videos/Gifs with the caption ${prefix + command}\nVideo Duration: 1-9 Seconds`); // Handle unsupported media
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    reply("An error occurred while processing the sticker. Please try again.");
+                }
             }
-            let media = await quoted.download(); // Download the video
-            await byxx.sendStvid(m.chat, media, m, {
-                packname: global.packname,
-                author: global.author
-            }); // Send the video as a sticker
-
-        } else {
-            reply(`Send/Reply to Images/Videos/Gifs with the caption ${prefix + command}\nVideo Duration: 1-9 Seconds`); // Handle unsupported media
-        }
-        
-    } catch (error) {
-        console.error(error);
-        reply("An error occurred while processing the sticker. Please try again.");
-    }
-}
-break;
+            break;
             case 'confuse':
             case 'conf': {
                 if (!isOwner) return reply(mess.owner);
@@ -3533,7 +3539,7 @@ break;
                             title: '𝐗̳𝐳͛𝐞͢𝐭ͯ𝐭 𝐂͞𝐫͖𝐚͆𝐬ͨ𝐡',
                             id: `xzett ${target}`
                         }]
-                   },
+                    },
                     {
                         highlight_label: "📃⃟༑⌁⃰𝐢ภ͢𝐟𝐢𝐧̿𝐢͖𝐭yཀ͜͡🦠",
                         rows: [{
