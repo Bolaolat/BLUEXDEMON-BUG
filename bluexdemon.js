@@ -762,14 +762,9 @@ END:VCARD`
         switch (command) {
             case 'help':
             case 'menu': {
-    try {
-        // Load audio and image files
-        const darkphonk = fs.readFileSync('./database/haha.mp3');
-        const menuImage = fs.readFileSync("./database/image/blue.jpg");
-
-        // Define menu text
-        const version = require("baileys/package.json").version;
-        const menu = `┏━━━ ｢ \`𝙱𝙻𝚄𝙴 𝙳𝙴𝙼𝙾𝙽͖\` ━━━❐
+                darkphonk = fs.readFileSync('./database/haha.mp3')
+                const version = require("baileys/package.json").version;
+                const menu = `┏━━━ ｢ \`𝙱𝙻𝚄𝙴 𝙳𝙴𝙼𝙾𝙽͖\` ｣ ━━━❐
 ┃✾ᐉ 𝐍𝐚𝐦𝐞 : *${pushname}*
 ┃✾ᐉ 𝐁𝐨𝐭 : *${botname}*
 ┃✾ᐉ 𝐑𝐮𝐧 : *${run}*
@@ -788,62 +783,64 @@ END:VCARD`
 > ᴛʏᴘᴇ ʀᴜʟᴇ ᴛᴏ ᴄʜᴇᴄᴋ ʀᴜʟᴇꜱ 
 `;
 
-        // Prepare interactive message content
-        const interactiveContent = await prepareWAMessageMedia({
-            image: menuImage
-        }, { upload: byxx.waUploadToServer });
+                let listMessage = {
+                    text: menu, // Include the menu text in the message
+                    title: '𝗠𝗘𝗡𝗨͖'
+                };
 
-        const interactiveMessage = {
-            viewOnceMessage: {
-                message: {
-                    messageContextInfo: {
-                        deviceListMetadata: {},
-                        deviceListMetadataVersion: 2
-                    },
-                    interactiveMessage: proto.Message.InteractiveMessage.create({
-                        contextInfo: {
-                            mentionedJid: [m.sender],
-                            externalAdReply: {
-                                showAdAttribution: true
-                            }
-                        },
-                        body: proto.Message.InteractiveMessage.Body.create({
-                            text: menu
-                        }),
-                        footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: ''
-                        }),
-                        header: proto.Message.InteractiveMessage.Header.create({
-                            hasMediaAttachment: true,
-                            ...interactiveContent
-                        }),
-                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                            buttons: [{
-                                "name": "cta_url",
-                                "buttonParamsJson": "{\"display_text\":\"𝗕𝗟𝗨𝗘 𝗗𝗘𝗠𝗢𝗡\",\"url\":\"https://wa.me/2347041039367\",\"merchant_url\":\"https://wa.me/2347041039367\"}"
-                            }]
-                        })
-                    })
-                }
+                let freesex = generateWAMessageFromContent(m.chat, {
+                    viewOnceMessage: {
+                        message: {
+                            "messageContextInfo": {
+                                "deviceListMetadata": {},
+                                "deviceListMetadataVersion": 2
+                            },
+                            interactiveMessage: proto.Message.InteractiveMessage.create({
+                                contextInfo: {
+                                    mentionedJid: [m.sender],
+                                    externalAdReply: {
+                                        showAdAttribution: true
+                                    }
+                                },
+                                body: proto.Message.InteractiveMessage.Body.create({
+                                    text: menu
+                                }),
+                                footer: proto.Message.InteractiveMessage.Footer.create({
+                                    text: ''
+                                }),
+                                header: proto.Message.InteractiveMessage.Header.create({
+                                    hasMediaAttachment: true,
+                                    ...(await prepareWAMessageMedia({
+                                        image: await fs.readFileSync("./database/image/blue.jpg")
+                                    }, {
+                                        upload: byxx.waUploadToServer
+                                    }))
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                                    buttons: [{
+                                        "name": "cta_url",
+                                        "buttonParamsJson": "{\"display_text\":\"𝗕𝗟𝗨𝗘 𝗗𝗘𝗠𝗢𝗡\",\"url\":\"https://wa.me/2347041039367\",\"merchant_url\":\"https://wa.me/2347041039367\"}"
+                                    }]
+                                })
+                            })
+                        }
+                    }
+                }, {
+                    userJid: m.sender,
+                    quoted: m
+                })
+                await byxx.relayMessage(freesex.key.remoteJid, freesex.message, {
+                    messageId: freesex.key.id
+                })
+                await byxx.sendMessage(m.chat, {
+                    audio: darkphonk,
+                    mimetype: 'audio/mp4',
+                    ptt: true
+                }, {
+                    quoted: m
+                })
             }
-        };
-
-        // Send the interactive message
-        const generatedMessage = generateWAMessageFromContent(m.chat, interactiveMessage, { userJid: m.sender, quoted: m });
-        await byxx.relayMessage(generatedMessage.key.remoteJid, generatedMessage.message, { messageId: generatedMessage.key.id });
-
-        // Send audio after menu
-        await byxx.sendMessage(m.chat, {
-            audio: darkphonk,
-            mimetype: 'audio/mp4',
-            ptt: true
-        }, { quoted: m });
-
-    } catch (error) {
-        reply(`An error occurred: ${error.message}`);
-    }
-    break;
-}
+            break
             case 'bugmenu': {
                 const version = require("baileys/package.json").version;
                 const bugmenu = `┏─── ｢ \`𝙱𝙻𝚄𝙴 𝙳𝙴𝙼𝙾𝙽͖\` ｣ ──❐
